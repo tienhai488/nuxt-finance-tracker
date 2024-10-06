@@ -13,30 +13,30 @@
       <Trend
         color="green"
         title="Income"
-        :amount="4000"
-        :last-amount="3000"
+        :amount="2000"
+        :last-amount="5000"
         :loading="false"
       />
       <Trend
         color="red"
-        title="Income"
-        :amount="4000"
-        :last-amount="3000"
+        title="Expense"
+        :amount="4500"
+        :last-amount="4400"
         :loading="false"
       />
       <Trend
         color="red"
-        title="Income"
+        title="Investments"
         :amount="4000"
-        :last-amount="3000"
+        :last-amount="4500"
         :loading="false"
       />
       <Trend
         color="green"
-        title="Income"
-        :amount="4000"
+        title="Saving"
+        :amount="2500"
         :last-amount="3000"
-        :loading="true"
+        :loading="false"
       />
     </section>
   </div>
