@@ -49,11 +49,14 @@
         </div>
       </div>
       <div>
+        <TransactionModal v-model="isOpen" />
+
         <UButton
           icon="i-heroicons-plus-circle"
           color="white"
           variant="solid"
           label="Add"
+          @click="isOpen = true"
         />
       </div>
     </section>
@@ -89,6 +92,8 @@ const supabase = useSupabaseClient();
 const transactions = ref([]);
 
 const isLoading = ref(false);
+
+const isOpen = ref(false);
 
 const fetchTransactions = async () => {
   isLoading.value = true;
