@@ -41,11 +41,18 @@
     </section>
 
     <section>
-      <Transaction
-        v-for="transaction in transactions"
-        :key="transaction.id"
-        :transaction="transaction"
-      />
+      <div
+        v-for="(transactions, date) in transactionsGroupedByDate"
+        :key="date"
+        class="mb-10"
+      >
+        <DailyTransactionSummary :date="date" :transactions="transactions" />
+        <Transaction
+          v-for="transaction in transactions"
+          :key="transaction.id"
+          :transaction="transaction"
+        />
+      </div>
     </section>
   </div>
 </template>
@@ -79,6 +86,4 @@ const transactionsGroupedByDate = computed(() => {
 
   return grouped;
 });
-
-console.log(transactionsGroupedByDate.value);
 </script>
