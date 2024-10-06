@@ -52,14 +52,33 @@
 
 <script setup>
 import { transactionViewOptions } from "~/constants";
+
 const selectedView = ref(transactionViewOptions[1]);
 const supabase = useSupabaseClient();
 
-const { data: transactions } = useAsyncData("transactions", async () => {
+const { data: transactions } = await useAsyncData("transactions", async () => {
   const { data, error } = await supabase.from("transactions").select();
 
   if (error) return [];
 
   return data;
 });
+
+const transactionsGroupedByDate = computed(() => {
+  let grouped = {};
+
+  for (const transaction of transactions.value) {
+    const date = transaction.created_at.split("T")[0];
+
+    if (!grouped[date]) {
+      grouped[date] = [];
+    }
+
+    grouped[date].push(transaction);
+  }
+
+  return grouped;
+});
+
+console.log(transactionsGroupedByDate.value);
 </script>
