@@ -4,7 +4,7 @@
 
     <div class="text-2xl font-extrabold text-black dark:text-white mb-2">
       <USkeleton class="h-8 w-full" v-if="loading" />
-      <div v-else>{{ amount }}</div>
+      <div v-else>{{ currency }}</div>
     </div>
 
     <div>
@@ -24,6 +24,8 @@
 </template>
 
 <script setup>
+import { useCurrency } from "~/composables/useCurrency";
+
 const props = defineProps({
   color: String,
   title: String,
@@ -32,7 +34,7 @@ const props = defineProps({
   loading: Boolean,
 });
 
-const trendingUp = computed(() => props.lastAmount >= props.amount);
+const trendingUp = computed(() => props.amount >= props.lastAmount);
 
 const iconTrend = computed(() =>
   trendingUp.value
@@ -50,6 +52,8 @@ const percentTrend = computed(() => {
 
   return Math.round(percent * 100) / 100 + "%";
 });
+
+const { currency } = useCurrency(props.amount);
 </script>
 
 <style scoped>
