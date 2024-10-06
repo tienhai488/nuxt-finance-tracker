@@ -4,14 +4,12 @@
   >
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-1">
-        <UIcon name="i-heroicons-arrow-up-right" class="text-green-600" />
-        <div class="uppercase">{{ transaction.type }}</div>
+        <UIcon :name="icon" :class="iconColor" />
+        <div :class="iconColor">{{ transaction.description }}</div>
       </div>
 
       <div>
-        <UBadge color="white" class="uppercase">{{
-          transaction.category
-        }}</UBadge>
+        <UBadge color="white">{{ transaction.category }}</UBadge>
       </div>
     </div>
 
@@ -51,4 +49,21 @@ const items = [
     },
   ],
 ];
+
+const isIncome = computed(() => props.transaction.type === "Income");
+
+const icon = computed(() =>
+  isIncome.value ? "i-heroicons-arrow-up-right" : "i-heroicons-arrow-down-right"
+);
+
+const iconColor = computed(() => (isIncome.value ? "green" : "red"));
 </script>
+
+<style scoped>
+.green {
+  @apply text-green-600 dark:text-green-400;
+}
+.red {
+  @apply text-red-600 dark:text-red-400;
+}
+</style>
