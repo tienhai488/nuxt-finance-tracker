@@ -15,32 +15,32 @@
         title="Income"
         :amount="2000"
         :last-amount="5000"
-        :loading="false"
+        :loading="isLoading"
       />
       <Trend
         color="red"
         title="Expense"
         :amount="4500"
         :last-amount="4400"
-        :loading="false"
+        :loading="isLoading"
       />
       <Trend
         color="red"
         title="Investments"
         :amount="4000"
         :last-amount="4500"
-        :loading="false"
+        :loading="isLoading"
       />
       <Trend
         color="green"
         title="Saving"
         :amount="2500"
         :last-amount="3000"
-        :loading="false"
+        :loading="isLoading"
       />
     </section>
 
-    <section>
+    <section v-if="!isLoading">
       <div
         v-for="(transactions, date) in transactionsGroupedByDate"
         :key="date"
@@ -51,8 +51,12 @@
           v-for="transaction in transactions"
           :key="transaction.id"
           :transaction="transaction"
+          @delete="refreshTransactions"
         />
       </div>
+    </section>
+    <section v-else>
+      <USkeleton class="h-8 w-full mb-2" v-for="i in 4" :key="i" />
     </section>
   </div>
 </template>
@@ -61,15 +65,34 @@
 import { transactionViewOptions } from "~/constants";
 
 const selectedView = ref(transactionViewOptions[1]);
+
 const supabase = useSupabaseClient();
 
-const { data: transactions } = await useAsyncData("transactions", async () => {
-  const { data, error } = await supabase.from("transactions").select();
+const transactions = ref([]);
 
-  if (error) return [];
+const isLoading = ref(false);
 
-  return data;
-});
+const fetchTransactions = async () => {
+  isLoading.value = true;
+  try {
+    const { data } = await useAsyncData("transactions", async () => {
+      const { data, error } = await supabase.from("transactions").select();
+
+      if (error) return [];
+
+      return data;
+    });
+
+    return data.value;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const refreshTransactions = async () =>
+  (transactions.value = await fetchTransactions());
+
+await refreshTransactions();
 
 const transactionsGroupedByDate = computed(() => {
   let grouped = {};
