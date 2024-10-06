@@ -13,14 +13,14 @@
       <Trend
         color="green"
         title="Income"
-        :amount="2000"
+        :amount="incomeTotal"
         :last-amount="5000"
         :loading="isLoading"
       />
       <Trend
         color="red"
         title="Expense"
-        :amount="4500"
+        :amount="expenseTotal"
         :last-amount="4400"
         :loading="isLoading"
       />
@@ -38,6 +38,24 @@
         :last-amount="3000"
         :loading="isLoading"
       />
+    </section>
+
+    <section class="flex items-center justify-between mb-10">
+      <div>
+        <h2 class="text-2xl font-extrabold">Transactions</h2>
+        <div class="text-gray-500 dark:text-gray-400">
+          You have {{ incomeCount }} incomes and {{ expenseCount }} expenses
+          this period
+        </div>
+      </div>
+      <div>
+        <UButton
+          icon="i-heroicons-plus-circle"
+          color="white"
+          variant="solid"
+          label="Add"
+        />
+      </div>
     </section>
 
     <section v-if="!isLoading">
@@ -109,4 +127,24 @@ const transactionsGroupedByDate = computed(() => {
 
   return grouped;
 });
+
+const income = computed(() =>
+  transactions.value.filter((transaction) => transaction.type == "Income")
+);
+
+const expense = computed(() =>
+  transactions.value.filter((transaction) => transaction.type == "Expense")
+);
+
+const incomeCount = computed(() => income.value.length);
+
+const expenseCount = computed(() => expense.value.length);
+
+const incomeTotal = computed(() =>
+  income.value.reduce((sum, transaction) => sum + transaction.amount, 0)
+);
+
+const expenseTotal = computed(() =>
+  expense.value.reduce((sum, transaction) => sum + transaction.amount, 0)
+);
 </script>
