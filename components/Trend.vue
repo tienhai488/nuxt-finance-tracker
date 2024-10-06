@@ -24,8 +24,6 @@
 </template>
 
 <script setup>
-import { useCurrency } from "~/composables/useCurrency";
-
 const props = defineProps({
   color: String,
   title: String,
