@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid grid-cols-2 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100"
+    class="grid grid-cols-2 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100 space-x-4 col-span-2"
   >
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-1">
@@ -8,7 +8,7 @@
         <div :class="iconColor">{{ transaction.description }}</div>
       </div>
 
-      <div>
+      <div v-if="transaction.category">
         <UBadge color="white">{{ transaction.category }}</UBadge>
       </div>
     </div>
