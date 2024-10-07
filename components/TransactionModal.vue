@@ -47,7 +47,13 @@
           <UTextarea placeholder="Description" v-model="state.description" />
         </UFormGroup>
 
-        <UButton type="submit" color="blue" variant="solid" label="Submit" />
+        <UButton
+          type="submit"
+          color="blue"
+          variant="solid"
+          label="Submit"
+          :loading="isLoading"
+        />
       </UForm>
     </UCard>
   </UModal>
@@ -57,16 +63,41 @@
 import { types, categories } from "~/constants";
 import { z } from "zod";
 
+const supabase = useSupabaseClient();
+
 const props = defineProps({
   modelValue: Boolean,
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "saved"]);
 
 const form = ref(null);
 
+const isLoading = ref(false);
+
 const onSubmit = async () => {
   if (form.value.errors.length) return;
+
+  isLoading.value = true;
+  try {
+    const { error } = await supabase
+      .from("transactions")
+      .upsert({ ...state.value })
+      .select();
+
+    if (!error) {
+      useToastShow("Saved successfully.", "success");
+      isOpen.value = false;
+      emit("saved");
+      return;
+    }
+
+    throw error;
+  } catch (error) {
+    useToastShow("Save error.", "error", error.message);
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const isOpen = computed({

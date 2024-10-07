@@ -49,7 +49,7 @@
         </div>
       </div>
       <div>
-        <TransactionModal v-model="isOpen" />
+        <TransactionModal v-model="isOpen" @saved="refreshTransactions" />
 
         <UButton
           icon="i-heroicons-plus-circle"
@@ -62,11 +62,7 @@
     </section>
 
     <section v-if="!isLoading">
-      <div
-        v-for="(transactions, date) in transactionsGroupedByDate"
-        :key="date"
-        class="mb-10"
-      >
+      <div v-for="(transactions, date) in byDate" :key="date" class="mb-10">
         <DailyTransactionSummary :date="date" :transactions="transactions" />
         <Transaction
           v-for="transaction in transactions"
@@ -87,74 +83,19 @@ import { transactionViewOptions } from "~/constants";
 
 const selectedView = ref(transactionViewOptions[1]);
 
-const supabase = useSupabaseClient();
-
-const transactions = ref([]);
-
-const isLoading = ref(false);
-
 const isOpen = ref(false);
 
-const fetchTransactions = async () => {
-  isLoading.value = true;
-  try {
-    const { data } = await useAsyncData("transactions", async () => {
-      const { data, error } = await supabase
-        .from("transactions")
-        .select()
-        .order("created_at", {
-          ascending: false,
-        });
-
-      if (error) return [];
-
-      return data;
-    });
-
-    return data.value;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const refreshTransactions = async () =>
-  (transactions.value = await fetchTransactions());
+const {
+  transactions: {
+    grouped: { byDate },
+    incomeCount,
+    expenseCount,
+    incomeTotal,
+    expenseTotal,
+  },
+  isLoading,
+  refreshTransactions,
+} = useFetchTransactions();
 
 await refreshTransactions();
-
-const transactionsGroupedByDate = computed(() => {
-  let grouped = {};
-
-  for (const transaction of transactions.value) {
-    const date = transaction.created_at.split("T")[0];
-
-    if (!grouped[date]) {
-      grouped[date] = [];
-    }
-
-    grouped[date].push(transaction);
-  }
-
-  return grouped;
-});
-
-const income = computed(() =>
-  transactions.value.filter((transaction) => transaction.type == "Income")
-);
-
-const expense = computed(() =>
-  transactions.value.filter((transaction) => transaction.type == "Expense")
-);
-
-const incomeCount = computed(() => income.value.length);
-
-const expenseCount = computed(() => expense.value.length);
-
-const incomeTotal = computed(() =>
-  income.value.reduce((sum, transaction) => sum + transaction.amount, 0)
-);
-
-const expenseTotal = computed(() =>
-  expense.value.reduce((sum, transaction) => sum + transaction.amount, 0)
-);
 </script>
