@@ -14,14 +14,14 @@
         color="green"
         title="Income"
         :amount="incomeTotal"
-        :last-amount="5000"
+        :last-amount="previousIncomeTotal"
         :loading="isLoading"
       />
       <Trend
         color="red"
         title="Expense"
         :amount="expenseTotal"
-        :last-amount="4400"
+        :last-amount="previousExpenseTotal"
         :loading="isLoading"
       />
       <Trend
@@ -49,7 +49,10 @@
         </div>
       </div>
       <div>
-        <TransactionModal v-model="isOpen" @saved="refreshTransactions" />
+        <TransactionModal
+          v-model="isOpen"
+          @saved="refreshTransactionsCurrent"
+        />
 
         <UButton
           icon="i-heroicons-plus-circle"
@@ -68,7 +71,7 @@
           v-for="transaction in transactions"
           :key="transaction.id"
           :transaction="transaction"
-          @delete="refreshTransactions"
+          @delete="refreshTransactionsCurrent"
         />
       </div>
     </section>
@@ -83,6 +86,8 @@ import { transactionViewOptions } from "~/constants";
 
 const selectedView = ref(transactionViewOptions[1]);
 
+const { current, previous } = useSelectedTimePeriod(selectedView);
+
 const isOpen = ref(false);
 
 const {
@@ -94,8 +99,21 @@ const {
     expenseTotal,
   },
   isLoading,
-  refreshTransactions,
-} = useFetchTransactions();
+  refreshTransactions: refreshTransactionsCurrent,
+} = useFetchTransactions(current);
+await refreshTransactionsCurrent();
 
-await refreshTransactions();
+const {
+  transactions: {
+    incomeTotal: previousIncomeTotal,
+    expenseTotal: previousExpenseTotal,
+  },
+  refreshTransactions: refreshTransactionsPrevious,
+} = useFetchTransactions(previous);
+await refreshTransactionsPrevious();
+
+const refreshTransactionsAll = async () => {
+  await refreshTransactionsCurrent();
+  await refreshTransactionsPrevious();
+};
 </script>

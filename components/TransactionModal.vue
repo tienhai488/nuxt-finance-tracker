@@ -13,12 +13,8 @@
           <USelect placeholder="Type" :options="types" v-model="state.type" />
         </UFormGroup>
 
-        <UFormGroup label="amount" required name="amount">
-          <UInput
-            type="number"
-            placeholder="Amount"
-            v-model.number="state.amount"
-          />
+        <UFormGroup label="Amount" required name="amount">
+          <UInput type="number" v-model.number="state.amount" />
         </UFormGroup>
 
         <UFormGroup label="Date" required name="created_at">

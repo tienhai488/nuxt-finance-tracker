@@ -51,7 +51,11 @@ const percentTrend = computed(() => {
   return Math.round(percent * 100) / 100 + "%";
 });
 
-const { currency } = useCurrency(props.amount);
+const currency = computed(() => {
+  const { currency } = useCurrency(props.amount);
+
+  return currency;
+});
 </script>
 
 <style scoped>
