@@ -49,10 +49,7 @@
         </div>
       </div>
       <div>
-        <TransactionModal
-          v-model="isOpen"
-          @saved="refreshTransactionsCurrent"
-        />
+        <TransactionModal v-model="isOpen" @saved="refreshTransactionsAll" />
 
         <UButton
           icon="i-heroicons-plus-circle"
@@ -71,7 +68,7 @@
           v-for="transaction in transactions"
           :key="transaction.id"
           :transaction="transaction"
-          @delete="refreshTransactionsCurrent"
+          @delete="refreshTransactionsAll"
         />
       </div>
     </section>
