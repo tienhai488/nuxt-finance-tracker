@@ -71,6 +71,8 @@ const form = ref(null);
 
 const isLoading = ref(false);
 
+const { toastSuccess, toastError } = useAppToast();
+
 const onSubmit = async () => {
   if (form.value.errors.length) return;
 
@@ -82,7 +84,7 @@ const onSubmit = async () => {
       .select();
 
     if (!error) {
-      useToastShow("Saved successfully.", "success");
+      toastSuccess("Saved successfully.");
       isOpen.value = false;
       emit("saved");
       return;
@@ -90,7 +92,7 @@ const onSubmit = async () => {
 
     throw error;
   } catch (error) {
-    useToastShow("Save error.", "error", error.message);
+    toastError("Save error.", error.message);
   } finally {
     isLoading.value = false;
   }

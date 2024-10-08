@@ -47,6 +47,8 @@ const pending = ref(false);
 
 useRedirectIfAuthenticated();
 
+const { toastError } = useAppToast();
+
 const handleSignIn = async () => {
   pending.value = true;
 
@@ -59,7 +61,7 @@ const handleSignIn = async () => {
     });
 
     if (error) {
-      useToastShow("Error authentication.", "error", error.message);
+      toastError("Error authentication.", error.message);
     } else {
       success.value = true;
     }
