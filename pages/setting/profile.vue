@@ -13,9 +13,9 @@
       <UInput v-model="state.email" placeholder="Email" />
     </UFormGroup>
 
-    <UButton type="submit" :loading="pending" :disabled="pending"
-      >Submit</UButton
-    >
+    <UButton type="submit" :loading="pending" :disabled="pending">
+      Submit
+    </UButton>
   </UForm>
 </template>
 
