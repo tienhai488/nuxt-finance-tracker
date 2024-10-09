@@ -12,10 +12,7 @@
         :ui="{ item: { disabled: 'cursor-text select-text' }, width: 'w-64' }"
         v-if="user"
       >
-        <UAvatar
-          src="https://avatars.githubusercontent.com/u/739984?v=4"
-          alt="Avatar"
-        />
+        <UAvatar :src="avatarUrl" alt="Avatar" />
         <template #account="{ item }">
           <div class="text-left">
             <p class="font-bold text-black dark:text-white">
@@ -41,8 +38,8 @@
 </template>
 <script setup>
 const supabase = useSupabaseClient();
-
 const user = useSupabaseUser();
+const { avatarUrl } = useAvatarUrl();
 
 const items = [
   [
