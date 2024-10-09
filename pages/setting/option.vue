@@ -19,6 +19,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: "Setting Option",
+});
+
 import { z } from "zod";
 import { transactionViewOptions } from "~/constants";
 

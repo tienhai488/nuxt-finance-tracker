@@ -40,6 +40,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: "Login",
+});
+
 const supabase = useSupabaseClient();
 const success = ref(false);
 const email = ref("");

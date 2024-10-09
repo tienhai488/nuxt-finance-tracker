@@ -6,5 +6,9 @@
 </template>
 
 <script setup>
+useHead({
+  title: "Confirm",
+});
+
 useRedirectIfAuthenticated();
 </script>

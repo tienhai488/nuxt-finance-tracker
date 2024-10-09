@@ -69,6 +69,7 @@
           :key="transaction.id"
           :transaction="transaction"
           @delete="refreshTransactionsAll"
+          @edited="refreshTransactionsAll"
         />
       </div>
     </section>
@@ -79,6 +80,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: "Dashboard",
+});
+
 import { transactionViewOptions } from "~/constants";
 
 const user = useSupabaseUser();

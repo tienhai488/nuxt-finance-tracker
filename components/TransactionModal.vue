@@ -1,7 +1,9 @@
 <template>
   <UModal v-model="isOpen">
     <UCard>
-      <template #header> Add Transaction </template>
+      <template #header>
+        {{ isEditing ? "Edit" : "Add" }} Transaction
+      </template>
       <UForm
         :schema="schema"
         :state="state"
@@ -10,7 +12,12 @@
         @submit="onSubmit"
       >
         <UFormGroup label="Type" required name="type">
-          <USelect placeholder="Type" :options="types" v-model="state.type" />
+          <USelect
+            placeholder="Type"
+            :options="types"
+            v-model="state.type"
+            :disabled="isEditing"
+          />
         </UFormGroup>
 
         <UFormGroup label="Amount" required name="amount">
@@ -63,7 +70,13 @@ const supabase = useSupabaseClient();
 
 const props = defineProps({
   modelValue: Boolean,
+  transaction: {
+    type: Object,
+    required: false,
+  },
 });
+
+const isEditing = computed(() => !!props.transaction);
 
 const emit = defineEmits(["update:modelValue", "saved"]);
 
@@ -80,7 +93,7 @@ const onSubmit = async () => {
   try {
     const { error } = await supabase
       .from("transactions")
-      .upsert({ ...state.value })
+      .upsert({ ...state.value, id: props.transaction?.id })
       .select();
 
     if (!error) {
@@ -106,13 +119,21 @@ const isOpen = computed({
   },
 });
 
-const initState = {
-  type: undefined,
-  amount: 0,
-  created_at: undefined,
-  category: undefined,
-  description: undefined,
-};
+const initState = isEditing.value
+  ? {
+      type: props.transaction.type,
+      amount: props.transaction.amount,
+      created_at: props.transaction.created_at.split("T")[0],
+      category: props.transaction.category,
+      description: props.transaction.description,
+    }
+  : {
+      type: undefined,
+      amount: 0,
+      created_at: undefined,
+      category: undefined,
+      description: undefined,
+    };
 
 const state = ref({
   ...initState,

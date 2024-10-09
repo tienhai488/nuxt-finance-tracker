@@ -30,6 +30,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: "Setting Avatar",
+});
+
 import { z } from "zod";
 
 const supabase = useSupabaseClient();

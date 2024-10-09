@@ -4,7 +4,7 @@ export const useAvatarUrl = () => {
 
     const getAvatarUrl = () => {
         const fileName = user.value?.user_metadata?.avatar_url;
-        if (!fileName) return null
+        if (!fileName) return '/avatar-default.png'
 
         const { data } = supabase
             .storage

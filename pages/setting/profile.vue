@@ -20,6 +20,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: "Setting Profile",
+});
+
 import { z } from "zod";
 
 const supabase = useSupabaseClient();

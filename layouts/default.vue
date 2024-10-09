@@ -9,6 +9,7 @@
   
 <script setup>
 useHead({
+  titleTemplate: "%s - TienHai",
   link: [
     {
       rel: "preconnect",

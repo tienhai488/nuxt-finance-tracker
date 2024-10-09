@@ -7,7 +7,11 @@
   </div>
 </template>
   
-  <script setup>
+<script setup>
+useHead({
+  title: "Setting",
+});
+
 const links = [
   {
     label: "Profile",
