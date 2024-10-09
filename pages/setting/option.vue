@@ -1,10 +1,14 @@
 <template>
   <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-    <UFormGroup label="View Option" :required="true" name="view_option">
+    <UFormGroup
+      label="Transaction View Option"
+      :required="true"
+      name="transaction_view_option"
+    >
       <USelect
         :options="transactionViewOptions"
-        placeholder="View Option"
-        v-model="state.view_option"
+        placeholder="Transaction View Option"
+        v-model="state.transaction_view_option"
       />
     </UFormGroup>
 
@@ -24,11 +28,11 @@ const { toastSuccess, toastError } = useAppToast();
 const pending = ref(false);
 
 const schema = z.object({
-  view_option: z.string(),
+  transaction_view_option: z.string(),
 });
 
 const state = ref({
-  view_option: user.value?.user_metadata?.view_option,
+  transaction_view_option: user.value?.user_metadata?.transaction_view_option,
 });
 
 const onSubmit = async () => {
@@ -37,7 +41,7 @@ const onSubmit = async () => {
   try {
     const { error } = await supabase.auth.updateUser({
       data: {
-        view_option: state.value.view_option,
+        transaction_view_option: state.value.transaction_view_option,
       },
     });
 

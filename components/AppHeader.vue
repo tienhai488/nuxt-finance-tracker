@@ -1,7 +1,12 @@
 <template>
   <div class="flex justify-between items-center mt-10">
     <NuxtLink to="/" class="text-xl font-bold">Finance Tracker</NuxtLink>
-    <div>
+    <div class="flex items-center space-x-4">
+      <UToggle
+        on-icon="i-heroicons-sun"
+        off-icon="i-heroicons-moon"
+        v-model="isThemeLight"
+      />
       <UDropdown
         :items="items"
         :ui="{ item: { disabled: 'cursor-text select-text' }, width: 'w-64' }"
@@ -36,7 +41,9 @@
 </template>
 <script setup>
 const supabase = useSupabaseClient();
+
 const user = useSupabaseUser();
+
 const items = [
   [
     {
@@ -49,7 +56,7 @@ const items = [
     {
       label: "Settings",
       icon: "i-heroicons-cog-8-tooth",
-      onClick: () => navigateTo("/setting"),
+      onClick: () => navigateTo("/setting/profile"),
     },
     {
       label: "Sign out",
@@ -61,4 +68,10 @@ const items = [
     },
   ],
 ];
+
+const isThemeLight = ref(true);
+
+const colorMode = useColorMode();
+
+colorMode.preference = computed(() => (isThemeLight.value ? "light" : "dark"));
 </script>

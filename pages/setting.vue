@@ -21,7 +21,7 @@ const links = [
   },
   {
     label: "View Option",
-    to: "/setting/view-option",
+    to: "/setting/option",
     icon: "i-heroicons-adjustments-horizontal",
   },
 ];

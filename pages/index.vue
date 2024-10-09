@@ -83,7 +83,8 @@ import { transactionViewOptions } from "~/constants";
 
 const user = useSupabaseUser();
 const selectedView = ref(
-  user.value?.user_metadata?.view_option ?? transactionViewOptions[1]
+  user.value?.user_metadata?.transaction_view_option ??
+    transactionViewOptions[1]
 );
 const { current, previous } = useSelectedTimePeriod(selectedView);
 const isOpen = ref(false);
